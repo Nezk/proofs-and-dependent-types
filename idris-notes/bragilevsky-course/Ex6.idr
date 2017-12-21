@@ -67,4 +67,50 @@ exactLength2 {m} len xs =
     Yes Refl => Just xs 
     No _ => Nothing
 
+{-
+
+data Elem : a -> Vect k a -> Type where
+  Here : Elem x (x :: xs)
+  There : (later : Elem x xs) -> Elem x (y :: xs)
+
+-}
+
+hasOne : Elem 1 [1,2,3]
+hasOne = Here
+
+hasFalse : Elem False [True, True, False]
+hasFalse = There (There Here)
+
+{-
+
+hasZero : Elem 0 [1,2,3]
+hasZero = There (There (There ?hasZero_rhs2))
+
+-}
+
 removeElem : DecEq a => (v : a) -> (xs : Vect (S n) a) -> Elem v xs -> Vect n a
+removeElem v (v :: ys) Here = ys
+removeElem {n = Z} _ (_ :: _) (There _) impossible
+removeElem {n = (S k)} v (y :: ys) (There later) = y :: removeElem v ys later
+
+removeElemAuto : DecEq a => (v : a) -> (xs : Vect (S n) a) -> {auto prf : Elem v xs} -> Vect n a
+removeElemAuto v xs {prf} = removeElem v xs prf
+
+-- if not(x <= y) then (x > y)
+not_lte__gt : Not (x `LTE` y) -> x `GT` y
+not_lte__gt {x = Z} contra = absurd (contra LTEZero)
+not_lte__gt {x = (S k)} {y = Z} contra = LTESucc LTEZero
+not_lte__gt {x = (S k)} {y = (S j)} contra = 
+            LTESucc (not_lte__gt {x = k} {y = j} (\pf => contra (LTESucc pf)))
+ 
+
+
+{-
+
+-- if x > y then y <= x
+gt__lte : x `GT` y -> y `LTE` x
+
+-- if not(x <= y) then (y <= x)
+not_lte__lt : Not (x `LTE` y) -> y `LTE` x
+
+-}
