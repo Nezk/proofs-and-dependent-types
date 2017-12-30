@@ -29,6 +29,11 @@ data Fin : ℕ → Set where
 f¹ : Fin 1
 f¹ = zero 0
 
-f² : Fin 3
+f² : Fin 3 -- zero (suc 2)
 f² = zero 2
 
+f³ : Fin 4
+f³ = suc 3 (suc 2 (zero 1))
+--                 ^ Fin 2
+--          ^ Fin 3
+--  ^ Fin 4
