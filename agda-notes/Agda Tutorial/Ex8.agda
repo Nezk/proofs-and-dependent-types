@@ -184,7 +184,7 @@ n⁷ = sns (sns (znn {1}))
 n⁸ : 5 + 5 ≡ 10
 n⁸ = sns (sns (sns (sns (sns znn))))
 
-n⁹ : 2 + 2 ≡ 5 → ⊥
+n⁹ : 2 + 2 ≡ 5 т→ ⊥
 n⁹ (sns (sns ()))
 
 -- data _⊓_ : ℕ → ℕ → Set where
