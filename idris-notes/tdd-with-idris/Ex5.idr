@@ -68,6 +68,49 @@ pictureArea (Translate x y pic) = pictureArea pic
 
 -}
 
+safeDivide : Double -> Double -> Maybe Double
+safeDivide x 0.0 = Nothing
+safeDivide x y = Just (x / y)
 
+data Tree elem = Empty | Node (Tree elem) elem (Tree elem)
 
+%name Tree tree, tree1
+
+insert : Ord elem => elem -> Tree elem -> Tree elem
+insert x Empty = Node Empty x Empty
+insert x orig@(Node left val right) = case compare x val of
+                                      LT => Node (insert x left) val right
+                                      EQ => orig
+                                      GT => Node left val (insert x right)
+
+data BSTree : Type -> Type where
+  BSEmpty : Ord elem => BSTree elem
+  BSNode : Ord elem => (left : BSTree elem) -> (val : elem) ->
+                       (right : BSTree elem) -> BSTree elem
+                       
+insertBS : elem -> BSTree elem -> BSTree elem
+insertBS x BSEmpty = BSNode BSEmpty x BSEmpty
+insertBS x orig@(BSNode left val right)
+      = case compare x val of
+             LT => BSNode (insertBS x left) val right
+             EQ => orig
+             GT => BSNode left val (insertBS x right)
+             
+listToTree : Ord a => List a -> Tree a
+listToTree [] = Empty
+listToTree (x :: xs) = insert x (listToTree xs)
+
+{-
+
+λΠ> listToTree [1,4,3,5,2]
+Node (Node Empty 1 Empty)
+     2
+     (Node (Node Empty 3 (Node Empty 4 Empty)) 5 Empty) : Tree Integer
+λΠ> 
+
+-}
+
+treeToList : Tree a -> List a
+treeToList Empty = []
+treeToList (Node tree x tree1) = (treeToList tree) ++ [x] ++ (treeToList tree1)
 
