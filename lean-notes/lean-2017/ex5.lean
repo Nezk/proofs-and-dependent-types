@@ -76,3 +76,4 @@ end ϕ
 
 #check (2 : ℤ)
 
+#reduce 2 + 2

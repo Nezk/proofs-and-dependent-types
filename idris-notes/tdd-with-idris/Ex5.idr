@@ -114,3 +114,12 @@ treeToList : Tree a -> List a
 treeToList Empty = []
 treeToList (Node tree x tree1) = (treeToList tree) ++ [x] ++ (treeToList tree1)
 
+{-
+
+λΠ> treeToList (listToTree [4,1,8,7,2,3,9,5,6])
+[1, 2, 3, 4, 5, 6, 7, 8, 9] : List Integer
+λΠ> 
+
+-}
+
+
